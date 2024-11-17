@@ -9,7 +9,7 @@ namespace Tyuiu.AidemirAF.Sprint5.Task0.V8.Test
         [TestMethod]
         public void TestMethod1()
         {
-            string directory = @"C:\Users\“»”\source\repos\Tyuiu.AidemirAF.Sprint5\Tyuiu.AidemirAF.Sprint5.Task0.V8\bin\Debug";
+            string directory = @"C:\Users\Honor\source\repos\Tyuiu.AidemirAF.Sprint5\Tyuiu.AidemirAF.Sprint5.Task0.V8\bin\Debug";
             string file = "OutPutFileTask0.txt";
             string path = Path.Combine(directory, file);
             FileInfo fileInfo = new FileInfo(path);

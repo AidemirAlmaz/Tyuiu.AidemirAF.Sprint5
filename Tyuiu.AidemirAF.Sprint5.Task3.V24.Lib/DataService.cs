@@ -9,7 +9,7 @@ namespace Tyuiu.AidemirAF.Sprint5.Task3.V24.Lib
         public string SaveToFileTextData(int x)
         {
             string path = $@"{Path.GetTempPath()}OutPutFileTask3.bin";
-            double y = Math.Round(6.1 * Math.Pow(x, 2) + 0.23 * Math.Pow(x, 2) + 1.04 * x, 3);
+            double y = Math.Round(6.1 * Math.Pow(x, 3) + 0.23 * Math.Pow(x, 2) + 1.04 * x, 3);
             using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate), Encoding.UTF8))
             {
                 writer.Write(BitConverter.GetBytes(y));

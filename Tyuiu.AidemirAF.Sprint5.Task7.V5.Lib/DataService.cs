@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Tyuiu.AidemirAF.Sprint5.Task7.V5.Lib
 {
@@ -9,49 +10,38 @@ namespace Tyuiu.AidemirAF.Sprint5.Task7.V5.Lib
     {
         public string LoadDataAndSave(string inputFilePath)
         {
-            // Input validation
-            if (string.IsNullOrEmpty(inputFilePath) || !File.Exists(inputFilePath))
+            string file = Path.GetTempFileName();
+            File.WriteAllText(file, "ПРИВЕТ, World! This МОЯ ПЕРВАЯ ПРОГРАММА.");
+            string saveFile = Path.Combine(Path.GetTempPath(), "OutPutDataFileTask7V5.txt");
+            FileInfo fl = new FileInfo(saveFile);
+            if (fl.Exists)
             {
-                Console.WriteLine($"Error: Input file not found or path is invalid: {inputFilePath}");
-                return null;
+                fl.Delete();
             }
 
-            // Output file path
-            string outputFilePath = Path.Combine(Path.GetDirectoryName(inputFilePath), "OutputDataFileTask7V5.txt");
-            Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
-
-
-            try
+            string str = "";
+            using (StreamReader sr = new StreamReader(file))
             {
-                // Read and process the input file.
-                string[] lines = File.ReadAllLines(inputFilePath);
-                string[] outputLines = lines.Select(line =>
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    // Remove Latin letters – this is the key change!
-                    return new string(line.Where(c => !char.IsLetter(c) || !((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))).ToArray());
-                }).ToArray();
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        if (char.IsUpper(line[i]) && line[i] >= 'A' && line[i] <= 'Z')
+                        {
 
-
-                // Delete output file if exists
-                if (File.Exists(outputFilePath))
-                {
-                    File.Delete(outputFilePath);
+                            str = str + char.ToLower(line[i]);
+                        }
+                        else
+                        {
+                            str = str + line[i];
+                        }
+                    }
+                    File.AppendAllText(saveFile, str);
                 }
-
-                // Write processed lines to the output file.
-                File.WriteAllLines(outputFilePath, outputLines);
-                return outputFilePath;
             }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"Error processing file: {ex.Message}");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-                return null;
-            }
+            return saveFile;
+            throw new NotImplementedException();
         }
     }
 }

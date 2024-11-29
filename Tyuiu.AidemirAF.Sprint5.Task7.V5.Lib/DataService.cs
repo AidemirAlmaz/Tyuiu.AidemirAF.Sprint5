@@ -1,47 +1,67 @@
-﻿using tyuiu.cources.programming.interfaces.Sprint5;
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-
+﻿using System.IO;
+using tyuiu.cources.programming.interfaces.Sprint5;
 namespace Tyuiu.AidemirAF.Sprint5.Task7.V5.Lib
 {
     public class DataService : ISprint5Task7V5
     {
-        public string LoadDataAndSave(string inputFilePath)
+        public string LoadDataAndSave(string path)
         {
-            string file = Path.GetTempFileName();
-            File.WriteAllText(file, "ПРИВЕТ, World! This МОЯ ПЕРВАЯ ПРОГРАММА.");
-            string saveFile = Path.Combine(Path.GetTempPath(), "OutPutDataFileTask7V5.txt");
-            FileInfo fl = new FileInfo(saveFile);
-            if (fl.Exists)
+            string path1 = Path.GetTempPath();
+            string path_new = Path.Combine(path1, "OutPutFileTask7.txt");
+            FileInfo fileInfo = new FileInfo(path_new);
+            bool fileExists = fileInfo.Exists;
+
+            if (fileExists)
             {
-                fl.Delete();
+                File.Delete(path_new);
             }
 
-            string str = "";
-            using (StreamReader sr = new StreamReader(file))
+            using (StreamReader reader = new StreamReader(path))
             {
                 string line;
-                while ((line = sr.ReadLine()) != null)
+                while ((line = reader.ReadLine()) != null)
                 {
+
+                    var filteredLine = new System.Text.StringBuilder();
                     for (int i = 0; i < line.Length; i++)
                     {
-                        if (char.IsUpper(line[i]) && line[i] >= 'A' && line[i] <= 'Z')
+
+                        if ((line[i] != 'H') && (line[i] != 'e') && (line[i] != 'l') && (line[i] != 'o') &&
+                            (line[i] != 'I') && (line[i] != 'F') && (line[i] != 's') && (line[i] != 'M') &&
+                            (line[i] != 'y') && (line[i] != 'i') && (line[i] != 'r') && (line[i] != 'P') &&
+                            (line[i] != 'g') && (line[i] != 'a') && (line[i] != 'm') && (line[i] != 't'))
                         {
 
-                            str = str + char.ToLower(line[i]);
-                        }
-                        else
-                        {
-                            str = str + line[i];
+                            if (!(line[i] == ' ' && (filteredLine.Length > 0 && filteredLine[^1] == ' ')))
+                            {
+                                filteredLine.Append(line[i]);
+                            }
                         }
                     }
-                    File.AppendAllText(saveFile, str);
+
+
+                    var finalLine = filteredLine.ToString().Trim();
+
+                    char[] charArray = finalLine.ToCharArray();
+
+                    if (charArray.Length >= 11)
+                    {
+                        charArray[10] = '\0';
+                    }
+
+
+                    string result = new string(charArray).Replace("\0", "").Trim();
+
+
+
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        File.AppendAllText(path_new, result + Environment.NewLine);
+                    }
                 }
             }
-            return saveFile;
-            throw new NotImplementedException();
+
+            return path_new;
         }
     }
 }

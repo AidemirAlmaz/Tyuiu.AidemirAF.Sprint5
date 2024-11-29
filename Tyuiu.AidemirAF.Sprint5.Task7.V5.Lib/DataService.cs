@@ -9,14 +9,14 @@ namespace Tyuiu.AidemirAF.Sprint5.Task7.V5.Lib
     {
         public string LoadDataAndSave(string inputFilePath)
         {
-            // Validate input path
+            // Input validation
             if (string.IsNullOrEmpty(inputFilePath) || !File.Exists(inputFilePath))
             {
                 Console.WriteLine($"Error: Input file not found or path is invalid: {inputFilePath}");
                 return null;
             }
 
-            // Output file path.  Make sure the directory exists!
+            // Output file path
             string outputFilePath = Path.Combine(Path.GetDirectoryName(inputFilePath), "OutputDataFileTask7V5.txt");
             Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
 
@@ -27,16 +27,18 @@ namespace Tyuiu.AidemirAF.Sprint5.Task7.V5.Lib
                 string[] lines = File.ReadAllLines(inputFilePath);
                 string[] outputLines = lines.Select(line =>
                 {
+                    // Remove Latin letters – this is the key change!
                     return new string(line.Where(c => !char.IsLetter(c) || !((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))).ToArray());
                 }).ToArray();
 
-                // Delete the output file if it already exists.
+
+                // Delete output file if exists
                 if (File.Exists(outputFilePath))
                 {
                     File.Delete(outputFilePath);
                 }
 
-                // Write the processed lines to the output file.
+                // Write processed lines to the output file.
                 File.WriteAllLines(outputFilePath, outputLines);
                 return outputFilePath;
             }

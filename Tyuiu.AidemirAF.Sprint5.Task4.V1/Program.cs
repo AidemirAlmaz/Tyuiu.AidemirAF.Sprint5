@@ -11,7 +11,7 @@ namespace Tyuiu.AidemirAF.Sprint5.Task4.V1
             Console.WriteLine("* ИСХОДНЫЕ ДАННЫЕ:                                                                                  *");
             Console.WriteLine("*****************************************************************************************************");
 
-            string path = $@"{Path.GetTempPath()}InPutFileTask4.txt";
+            string path = @"C:\DataSprint5\InPutDataFileTask4V1.txt";
             Console.WriteLine("Данные находятся в файле: " + path);
 
             Console.WriteLine("*****************************************************************************************************");
@@ -19,8 +19,7 @@ namespace Tyuiu.AidemirAF.Sprint5.Task4.V1
             Console.WriteLine("*****************************************************************************************************");
 
             double res = ds.LoadFromDataFile(path);
-            Console.WriteLine("Файл:" + res);
-            Console.WriteLine("Создан!");
+            Console.WriteLine(res);
             Console.ReadKey();
         }
     }

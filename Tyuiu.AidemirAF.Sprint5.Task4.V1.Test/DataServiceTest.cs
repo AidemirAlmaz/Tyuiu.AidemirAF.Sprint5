@@ -8,7 +8,7 @@ namespace Tyuiu.AidemirAF.Sprint5.Task4.V1.Test
         [TestMethod]
         public void TestMethod1()
         {
-            string path = Path.GetTempFileName();
+            string path = @"C:\DataSprint5\InPutDataFileTask4V1.txt";
             FileInfo fileInfo = new FileInfo(path);
             bool fileExists = fileInfo.Exists;
             bool wait = true;

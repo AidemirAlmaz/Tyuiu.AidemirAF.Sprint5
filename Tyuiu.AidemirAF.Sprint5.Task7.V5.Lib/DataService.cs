@@ -1,39 +1,55 @@
 ﻿using tyuiu.cources.programming.interfaces.Sprint5;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Tyuiu.AidemirAF.Sprint5.Task7.V5.Lib
 {
     public class DataService : ISprint5Task7V5
     {
-        public string LoadDataAndSave(string path)
+        public string LoadDataAndSave(string inputFilePath)
         {
-            string pathSaveFile = @"C:\DataSprint5\InPutDataFileTask7V5.txt";
-            Directory.CreateDirectory(Path.GetDirectoryName(pathSaveFile)); // Создаем директорию, если ее нет
-
-            if (!File.Exists(path))
+            // Validate input path
+            if (string.IsNullOrEmpty(inputFilePath) || !File.Exists(inputFilePath))
             {
-                Console.WriteLine($"Ошибка: Файл по пути '{path}' не найден.");
-                return null; // Или другое значение для обозначения ошибки
+                Console.WriteLine($"Error: Input file not found or path is invalid: {inputFilePath}");
+                return null;
             }
 
-            // Создаем выходной файл и записываем в него очищенные данные
-            using (StreamReader reader = new StreamReader(path))
+            // Output file path.  Make sure the directory exists!
+            string outputFilePath = Path.Combine(Path.GetDirectoryName(inputFilePath), "OutputDataFileTask7V5.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
+
+
+            try
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                // Read and process the input file.
+                string[] lines = File.ReadAllLines(inputFilePath);
+                string[] outputLines = lines.Select(line =>
                 {
-                    string strLine = "";
-                    foreach (char c in line)
-                    {
-                        if (!char.IsLetter(c) || !((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')))
-                        {
-                            strLine += c;
-                        }
-                    }
+                    return new string(line.Where(c => !char.IsLetter(c) || !((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))).ToArray());
+                }).ToArray();
+
+                // Delete the output file if it already exists.
+                if (File.Exists(outputFilePath))
+                {
+                    File.Delete(outputFilePath);
                 }
+
+                // Write the processed lines to the output file.
+                File.WriteAllLines(outputFilePath, outputLines);
+                return outputFilePath;
             }
-            return pathSaveFile;
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error processing file: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                return null;
+            }
         }
     }
 }
